@@ -132,8 +132,7 @@ public class BattleshipRemade
         String response = "";
         boolean check1 = false;
         boolean check2 = false;
-        boolean check3 = false;
-
+        
         shipType = shipType.toUpperCase();
 
         if (shipType.equalsIgnoreCase("c")) {
@@ -150,7 +149,7 @@ public class BattleshipRemade
         System.out.print("\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a starting location for your ship [Ex. A1]");
         response = input.nextLine();
 
-        while (check1 == false) {
+        while (check1 == false) {           
             printBoard(board, playerNumber, boardType);
             if (checkStartingLocation(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {
                 check1 = true;
@@ -160,15 +159,22 @@ public class BattleshipRemade
                 while (check2 == false) {
                     printBoard(board, playerNumber, boardType);
                     if (checkDirection(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {
-                        check2 = true;
                         if (placeShipOnBoard(board, playerNumber, boardType, shipLength, shipType, shipName)) {
-                            
+                            check2 = true;
                         } else {
-                            System.out.print("\n\nBad Placement");
+                            System.out.print("\n\nError - Cannot Place Ship There\n\nPlayer " + playerNumber + " - \nWould you like to:     a) change the coordinates \n                       b) change the direction");
+                            response = input.nextLine();
+                            if (response.equalsIgnoreCase("a")) {
+                                printBoard(board, playerNumber, boardType);
+                                System.out.print("\n\n");
+                                placeShips(board, playerNumber, boardType, shipType);
+                            } else if (response.equalsIgnoreCase("b")) {
+                                check2 = false;                                
+                            }
                         }
 
                     } else {
-                        System.out.print("\n\nError - Invalid Direction\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                        System.out.print("\n\n\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
                         response = input.nextLine();
                     }
                 }
@@ -219,6 +225,7 @@ public class BattleshipRemade
     private static boolean placeShipOnBoard(String[][][][] board, int playerNumber, int boardType, int shipLength, String shipType, String shipName) {
         int counter = 0;
         shipName = shipName.toLowerCase();
+        String coordinateXLetter = Character.toString((char)(coordinateX + 64));
 
         if (placementDirection.equalsIgnoreCase("U")) {
             for (int i = 0; i < shipLength; i++) {
@@ -234,7 +241,7 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going upwards");
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going upwards");
                 return true;
             } 
         }
@@ -252,7 +259,7 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going downwards");
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going downwards");
                 return true;
             } 
         }
@@ -270,7 +277,7 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going left");
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going left");
                 return true;
             } 
         }
@@ -288,7 +295,7 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going right");
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going right");
                 return true;
             } 
         }
