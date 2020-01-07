@@ -50,7 +50,7 @@ public class BattleshipRemade
 
         System.out.print("Player 1 Is Placing Ships...");
         waitTime1();
-        
+
         printBoard(masterBoard, 1, 1);
         System.out.print("\n\n");
         placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
@@ -138,7 +138,7 @@ public class BattleshipRemade
         String response = "";
         boolean check1 = false;
         boolean check2 = false;
-        
+
         shipType = shipType.toUpperCase();
 
         if (shipType.equalsIgnoreCase("c")) {
@@ -168,9 +168,11 @@ public class BattleshipRemade
                         if (placeShipOnBoard(board, playerNumber, boardType, shipLength, shipType, shipName)) {
                             check2 = true;
                         } else {
-                            System.out.print("\n\nError - Cannot Place Ship There\n\nPlayer " + playerNumber + " - \nWould you like to:     a) change the coordinates \n                       b) change the direction");
+                            System.out.print("\n\nError - Cannot Place Ship There\n\nPlayer " + playerNumber + " - \nWould you like to:\na) change the coordinates \nb) change the direction");
                             response = input.nextLine();
+                            check2 = false;
                             if (response.equalsIgnoreCase("a")) {
+                                check2 = true;
                                 printBoard(board, playerNumber, boardType);
                                 System.out.print("\n\n");
                                 placeShips(board, playerNumber, boardType, shipType);
@@ -247,7 +249,9 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going upwards");
+                if (!(shipType.equalsIgnoreCase("B"))){
+                    System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going upwards");
+                }
                 return true;
             } 
         }
@@ -265,7 +269,9 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going downwards");
+                if (!(shipType.equalsIgnoreCase("B"))){
+                    System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateXLetter + "" + coordinateY + " going downwards");
+                }
                 return true;
             } 
         }
@@ -283,7 +289,9 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going left");
+                if (!(shipType.equalsIgnoreCase("B"))){
+                    System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going left");
+                }
                 return true;
             } 
         }
@@ -301,7 +309,9 @@ public class BattleshipRemade
                     waitTime(); 
                     printBoard(board, playerNumber, boardType);
                 }
-                System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going right");
+                if (!(shipType.equalsIgnoreCase("B"))) {
+                    System.out.print("\n\nPlaced the " + shipName + " at coordinate " +  coordinateXLetter + "" + coordinateY + " going right");
+                }
                 return true;
             } 
         }
@@ -316,7 +326,7 @@ public class BattleshipRemade
             Thread.currentThread().interrupt();
         }   
     }
-    
+
     private static void waitTime1() {
         try {
             Thread.sleep(1500);
@@ -324,7 +334,7 @@ public class BattleshipRemade
             Thread.currentThread().interrupt();
         }   
     }
-    
+
     private static void waitTime2() {
         try {
             Thread.sleep(200);
