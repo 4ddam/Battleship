@@ -34,17 +34,31 @@
  * 1/6/2020
  */
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.Scanner;
 public class BattleshipRemade
 {
+    public static int coordinateX;
+    public static int coordinateY;
+    public static String placementDirection;
+    //public static String[][][][] masterBoard = new String[2][2][10][10];
+
     public static void main() {
-
         String[][][][] masterBoard = new String[2][2][10][10];              // Player Number, Board Type, Rows, Columns
-
         fillAllBoards(masterBoard, "-");
 
         printBoard(masterBoard, 1, 1);
+        System.out.print("\n\n");
+        placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
+        placeShips(masterBoard, 1, 1, "d");
+        placeShips(masterBoard, 1, 1, "b");
 
+        printBoard(masterBoard, 2, 1);
+        System.out.print("\n\n");
+        placeShips(masterBoard, 2, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
+        placeShips(masterBoard, 2, 1, "d");
+        placeShips(masterBoard, 2, 1, "b");
     }
 
     private static void fillAllBoards(String[][][][] board, String fillCharacter) {             // Fills all 4 boards
@@ -108,6 +122,186 @@ public class BattleshipRemade
                 System.out.print("       C = Cruiser    D = Destroyer    B = Battleship  ");
             }
         }
+    }
 
+    private static void placeShips(String[][][][] board, int playerNumber, int boardType, String shipType) {       // 1 = cruiser, 2 = destroyer, 3 = battleship
+        Scanner input = new Scanner (System.in);        
+
+        int shipLength = 4;
+        String shipName = "";
+        String response = "";
+        boolean check1 = false;
+        boolean check2 = false;
+        boolean check3 = false;
+
+        shipType = shipType.toUpperCase();
+
+        if (shipType.equalsIgnoreCase("c")) {
+            shipName = "Crusier";
+        }
+        if (shipType.equalsIgnoreCase("d")) {
+            shipName = "Destroyer";
+        }
+        if (shipType.equalsIgnoreCase("b")) {
+            shipLength = 5;
+            shipName = "Battle Ship";
+        }
+
+        System.out.print("\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a starting location for your ship [Ex. A1]");
+        response = input.nextLine();
+
+        while (check1 == false) {
+            printBoard(board, playerNumber, boardType);
+            if (checkStartingLocation(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {
+                check1 = true;
+                System.out.print("\n\n\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                response = input.nextLine();
+
+                while (check2 == false) {
+                    printBoard(board, playerNumber, boardType);
+                    if (checkDirection(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {
+                        check2 = true;
+                        if (placeShipOnBoard(board, playerNumber, boardType, shipLength, shipType, shipName)) {
+                            
+                        } else {
+                            System.out.print("\n\nBad Placement");
+                        }
+
+                    } else {
+                        System.out.print("\n\nError - Invalid Direction\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                        response = input.nextLine();
+                    }
+                }
+            } else {
+                System.out.print("\n\nError - Invalid Coordinate\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a starting location for your ship [Ex. A1]");
+                response = input.nextLine();
+            }
+
+        }
+    }
+
+    private static boolean checkStartingLocation(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {    
+        Pattern pattern1 = Pattern.compile("^([A-Ja-j])([1-9]|10)$");
+        Matcher matcher = pattern1.matcher(response);
+        boolean goodResponse = false;       
+
+        if (matcher.matches()) {               
+            coordinateY = Integer.parseInt(matcher.group(2));
+            coordinateX = (((int)matcher.group(1).toUpperCase().charAt(0)) - 64);
+
+            if (!((board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1)].equalsIgnoreCase("-")))) {
+                goodResponse = false;
+            } else {
+                //board[playerNumber-1][boardType-1][coordinateY-1][coordinateX-1] = shipType;
+                printBoard(board, playerNumber, boardType);
+                goodResponse = true;
+            }
+        } else {
+            goodResponse = false;
+        }
+        return goodResponse;
+    }
+
+    private static boolean checkDirection(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {
+        Pattern pattern1 = Pattern.compile("^([U|D|L|R|u|d|l|r]$)");
+        Matcher matcher = pattern1.matcher(response);
+        boolean goodResponse = false;     
+        if (matcher.matches()) {               
+            placementDirection = matcher.group(1).toUpperCase();
+            goodResponse = true;           
+        } else {
+            goodResponse = false;
+        }
+
+        return goodResponse;
+    }
+
+    private static boolean placeShipOnBoard(String[][][][] board, int playerNumber, int boardType, int shipLength, String shipType, String shipName) {
+        int counter = 0;
+        shipName = shipName.toLowerCase();
+
+        if (placementDirection.equalsIgnoreCase("U")) {
+            for (int i = 0; i < shipLength; i++) {
+                if (coordinateY - 1 - i < 0) {
+                    counter++;
+                } else if (!(board[playerNumber-1][boardType-1][(coordinateY - 1) - i][(coordinateX - 1)].equalsIgnoreCase("-"))) {
+                    counter++;
+                }
+            } 
+            if (counter == 0) {
+                for (int i = 0; i < shipLength; i++) {
+                    board[playerNumber-1][boardType-1][(coordinateY - 1) - i][(coordinateX - 1)] = shipType;
+                    waitTime(); 
+                    printBoard(board, playerNumber, boardType);
+                }
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going upwards");
+                return true;
+            } 
+        }
+        if (placementDirection.equalsIgnoreCase("D")) {
+            for (int i = 0; i < shipLength; i++) {
+                if (coordinateY - 1 + i > 9) {
+                    counter++;
+                } else if (!(board[playerNumber-1][boardType-1][(coordinateY - 1) + i][(coordinateX - 1)].equalsIgnoreCase("-"))) {
+                    counter++;
+                }
+            } 
+            if (counter == 0) {
+                for (int i = 0; i < shipLength; i++) {
+                    board[playerNumber-1][boardType-1][(coordinateY - 1) + i][(coordinateX - 1)] = shipType;
+                    waitTime(); 
+                    printBoard(board, playerNumber, boardType);
+                }
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going downwards");
+                return true;
+            } 
+        }
+        if (placementDirection.equalsIgnoreCase("L")) {
+            for (int i = 0; i < shipLength; i++) {
+                if (coordinateX - 1 - i < 0) {
+                    counter++;
+                } else if (!(board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) - i].equalsIgnoreCase("-"))) {
+                    counter++;
+                }
+            } 
+            if (counter == 0) {
+                for (int i = 0; i < shipLength; i++) {
+                    board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) - i] = shipType;
+                    waitTime(); 
+                    printBoard(board, playerNumber, boardType);
+                }
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going left");
+                return true;
+            } 
+        }
+        if (placementDirection.equalsIgnoreCase("R")) {
+            for (int i = 0; i < shipLength; i++) {
+                if (coordinateX - 1 + i > 9) {
+                    counter++;
+                } else if (!(board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) + i].equalsIgnoreCase("-"))) {
+                    counter++;
+                }
+            } 
+            if (counter == 0) {
+                for (int i = 0; i < shipLength; i++) {
+                    board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) + i] = shipType;
+                    waitTime(); 
+                    printBoard(board, playerNumber, boardType);
+                }
+                System.out.print("\n\nPlaced the " + shipName + " at coordinate " + coordinateX + "," + coordinateY + " going right");
+                return true;
+            } 
+        }
+
+        return false;
+    }
+
+    private static void waitTime() {
+        try {
+            Thread.sleep(120);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }   
     }
 }
+

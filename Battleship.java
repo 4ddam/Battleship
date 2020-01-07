@@ -47,6 +47,8 @@ public class Battleship
         String[][] P2Shipboard = new String[10][10];
         String[][] P1Torpedoboard = new String[10][10];
         String[][] P2Torpedoboard = new String[10][10];
+        
+        String[][][][] Board = new String[2][2][10][10];
 
         Start(P1Shipboard, P2Shipboard, P1Torpedoboard, P2Torpedoboard);
 
@@ -136,6 +138,11 @@ public class Battleship
             if (matcher.matches()) {               
                 int row = Integer.parseInt(matcher.group(2));
                 int column = (((int)matcher.group(1).toUpperCase().charAt(0)) - 64);
+                
+                input[row-1][column-1] = shipType;
+                printP1Shipboard(input, playerNumber, boardType);
+                
+                System.out.print("\n\n");
 
                 chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
                 selectionComplete = true;
@@ -152,9 +159,9 @@ public class Battleship
 
         Pattern pattern1 = Pattern.compile("^([U|D|L|R|u|d|l|r]$)");
 
-        input[row-1][column-1] = shipType;
-        printP1Shipboard(input, playerNumber, boardType);
-        System.out.print("\n\n\n\nShip length: " + shipLength + ". Choose direction the ship will go from this point: Up, Down, Left, Right [U, D, L, R] ");
+        // input[row-1][column-1] = shipType;
+        // printP1Shipboard(input, playerNumber, boardType);
+        System.out.print("\n\nShip length: " + shipLength + ". Choose direction the ship will go from this point: Up, Down, Left, Right [U, D, L, R] ");
 
         while (selectionComplete == false) {
             Matcher matcher = pattern1.matcher(scanner.nextLine());
@@ -176,16 +183,112 @@ public class Battleship
 
         while (cannotPlace == true) {
             if (direction.equalsIgnoreCase("U")) {
-                if (row >= 4) {
-                    for (int i = 0; i < shipLength - 1; i++) {
-                        input[(row - 1) - (i + 1)][column - 1] = shipType;
-                        cannotPlace = false;
+                if (shipLength == 4){
+                    if (row >= 4) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1) - (i + 1)][column - 1] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved upwards");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
                     } 
-                    printP1Shipboard(input, playerNumber, boardType);
-                } else {
-                    System.out.print("Cannot fit");
-                    chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
-                } 
+                } else if (shipLength == 5) {
+                    if (row >= 5) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1) - (i + 1)][column - 1] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved upwards");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                }
+            }
+            if (direction.equalsIgnoreCase("D")) {
+                if (shipLength == 4){
+                    if (row <= 7) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1) + (i + 1)][column - 1] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved downwards");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                } else if (shipLength == 5) {
+                    if (row <= 6) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1) + (i + 1)][column - 1] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved downwards");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                }
+            }
+            if (direction.equalsIgnoreCase("L")) {
+                if (shipLength == 4){
+                    if (column >= 4) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1)][(column - 1) - (i + 1)] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved left");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                } else if (shipLength == 5) {
+                    if (column >= 5) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1)][(column - 1) - (i + 1)] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved left");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                }
+            }
+            if (direction.equalsIgnoreCase("R")) {
+                if (shipLength == 4){
+                    if (column <= 7) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1)][(column - 1) + (i + 1)] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved right");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                } else if (shipLength == 5) {
+                    if (column <= 6) {
+                        for (int i = 0; i < shipLength - 1; i++) {
+                            input[(row - 1)][(column - 1) + (i + 1)] = shipType;
+                            cannotPlace = false;
+                        } 
+                        printP1Shipboard(input, playerNumber, boardType);
+                    } else {
+                        printP1Shipboard(input, playerNumber, boardType);
+                        System.out.print("\n\nThe ship will not fit if it is moved right");
+                        chooseDirection(input, shipLength, row, column, shipType, playerNumber, boardType);
+                    } 
+                }
             }
         }
     }
