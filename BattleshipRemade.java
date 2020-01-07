@@ -48,11 +48,17 @@ public class BattleshipRemade
         String[][][][] masterBoard = new String[2][2][10][10];              // Player Number, Board Type, Rows, Columns
         fillAllBoards(masterBoard, "-");
 
+        System.out.print("Player 1 Is Placing Ships...");
+        waitTime1();
+        
         printBoard(masterBoard, 1, 1);
         System.out.print("\n\n");
         placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
         placeShips(masterBoard, 1, 1, "d");
         placeShips(masterBoard, 1, 1, "b");
+        waitTime2();
+        System.out.print("\fPlayer 2 Is Placing Ships...");
+        waitTime1();
 
         printBoard(masterBoard, 2, 1);
         System.out.print("\n\n");
@@ -306,6 +312,22 @@ public class BattleshipRemade
     private static void waitTime() {
         try {
             Thread.sleep(120);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }   
+    }
+    
+    private static void waitTime1() {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }   
+    }
+    
+    private static void waitTime2() {
+        try {
+            Thread.sleep(200);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }   
