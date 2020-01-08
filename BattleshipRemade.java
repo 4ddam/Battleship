@@ -1,3 +1,4 @@
+
 /*
  * Before starting the assignment, read through the entire set of directions. This project will take several class periods (approximately 10 hrs.) 
  * so make a plan, don't wait til the last few days and expect to complete this project. 
@@ -42,23 +43,22 @@ public class BattleshipRemade
     public static int coordinateX;
     public static int coordinateY;
     public static String placementDirection;
-    //public static String[][][][] masterBoard = new String[2][2][10][10];
 
     public static void main() {
         String[][][][] masterBoard = new String[2][2][10][10];              // Player Number, Board Type, Rows, Columns
         fillAllBoards(masterBoard, "-");
 
         System.out.print("Player 1 Is Placing Ships...");
-        waitTime1();
+        waitTime(1500);
 
         printBoard(masterBoard, 1, 1);
         System.out.print("\n\n");
         placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
         placeShips(masterBoard, 1, 1, "d");
         placeShips(masterBoard, 1, 1, "b");
-        waitTime2();
+        waitTime(500);
         System.out.print("\fPlayer 2 Is Placing Ships...");
-        waitTime1();
+        waitTime(1500);
 
         printBoard(masterBoard, 2, 1);
         System.out.print("\n\n");
@@ -138,6 +138,7 @@ public class BattleshipRemade
         String response = "";
         boolean check1 = false;
         boolean check2 = false;
+        boolean check3 = false;
 
         shipType = shipType.toUpperCase();
 
@@ -177,12 +178,19 @@ public class BattleshipRemade
                                 System.out.print("\n\n");
                                 placeShips(board, playerNumber, boardType, shipType);
                             } else if (response.equalsIgnoreCase("b")) {
-                                check2 = false;                                
-                            }
+                                check2 = false;       
+                                check3 = true;
+                            } 
                         }
 
                     } else {
-                        System.out.print("\n\n\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                        if (check3 == true){
+                            System.out.print("\n\n\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " 
+                                + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                        } else if (check3 == false) {
+                            System.out.print("\n\nError - Invalid Direction\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " 
+                                + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                        }
                         response = input.nextLine();
                     }
                 }
@@ -206,7 +214,6 @@ public class BattleshipRemade
             if (!((board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1)].equalsIgnoreCase("-")))) {
                 goodResponse = false;
             } else {
-                //board[playerNumber-1][boardType-1][coordinateY-1][coordinateX-1] = shipType;
                 printBoard(board, playerNumber, boardType);
                 goodResponse = true;
             }
@@ -246,7 +253,7 @@ public class BattleshipRemade
             if (counter == 0) {
                 for (int i = 0; i < shipLength; i++) {
                     board[playerNumber-1][boardType-1][(coordinateY - 1) - i][(coordinateX - 1)] = shipType;
-                    waitTime(); 
+                    waitTime(120); 
                     printBoard(board, playerNumber, boardType);
                 }
                 if (!(shipType.equalsIgnoreCase("B"))){
@@ -266,7 +273,7 @@ public class BattleshipRemade
             if (counter == 0) {
                 for (int i = 0; i < shipLength; i++) {
                     board[playerNumber-1][boardType-1][(coordinateY - 1) + i][(coordinateX - 1)] = shipType;
-                    waitTime(); 
+                    waitTime(120); 
                     printBoard(board, playerNumber, boardType);
                 }
                 if (!(shipType.equalsIgnoreCase("B"))){
@@ -286,7 +293,7 @@ public class BattleshipRemade
             if (counter == 0) {
                 for (int i = 0; i < shipLength; i++) {
                     board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) - i] = shipType;
-                    waitTime(); 
+                    waitTime(120); 
                     printBoard(board, playerNumber, boardType);
                 }
                 if (!(shipType.equalsIgnoreCase("B"))){
@@ -306,7 +313,7 @@ public class BattleshipRemade
             if (counter == 0) {
                 for (int i = 0; i < shipLength; i++) {
                     board[playerNumber-1][boardType-1][(coordinateY - 1)][(coordinateX - 1) + i] = shipType;
-                    waitTime(); 
+                    waitTime(120); 
                     printBoard(board, playerNumber, boardType);
                 }
                 if (!(shipType.equalsIgnoreCase("B"))) {
@@ -319,25 +326,9 @@ public class BattleshipRemade
         return false;
     }
 
-    private static void waitTime() {
+    private static void waitTime(int time) {
         try {
-            Thread.sleep(120);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }   
-    }
-
-    private static void waitTime1() {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }   
-    }
-
-    private static void waitTime2() {
-        try {
-            Thread.sleep(200);
+            Thread.sleep(time);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }   
