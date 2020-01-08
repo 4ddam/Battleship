@@ -51,6 +51,9 @@ public class BattleshipRemade
         System.out.print("Player 1 Is Placing Ships...");
         waitTime(1500);
 
+        printDuelBoard(masterBoard, 1);
+
+        waitTime(50000);
         printBoard(masterBoard, 1, 1);
         System.out.print("\n\n");
         placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
@@ -65,6 +68,8 @@ public class BattleshipRemade
         placeShips(masterBoard, 2, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
         placeShips(masterBoard, 2, 1, "d");
         placeShips(masterBoard, 2, 1, "b");
+
+        printDuelBoard(masterBoard, 1);                              // board, first board player, first board type, second board player, second board type
     }
 
     private static void fillAllBoards(String[][][][] board, String fillCharacter) {             // Fills all 4 boards
@@ -130,6 +135,33 @@ public class BattleshipRemade
         }
     }
 
+    private static void printDuelBoard(String[][][][] board, int playerNumber) {
+        if (playerNumber == 1) {
+            System.out.println("\f\n                           𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙎𝙝𝙞𝙥 𝘽𝙤𝙖𝙧𝙙\t\t\t\t\t\t\t\t   𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙏𝙤𝙧𝙥𝙚𝙙𝙤 𝘽𝙤𝙖𝙧𝙙\n"); 
+            System.out.print("  ");
+            for (int r = 0; r < board[0][0].length; r++) {   
+                System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
+            }   
+            System.out.print("\t\t");
+            for (int r = 0; r < board[0][0].length; r++) {   
+                System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
+            } 
+            for (int r = 0; r < board[0][0].length; r++) {
+                System.out.print("\n\n"); 
+                for (int c = 0; c < board[0][0][0].length; c++) { 
+                    if (c%10 == 0) {
+                        if (r == 9) {
+                            System.out.print((r+1) + " ");
+                        } else {
+                            System.out.print((r+1) + "  ");
+                        }    
+                    }
+                    System.out.print("   " + board[playerNumber-1][0][r][c] + "   ");
+                }  
+            }   
+        }
+    }
+
     private static void placeShips(String[][][][] board, int playerNumber, int boardType, String shipType) {       // 1 = cruiser, 2 = destroyer, 3 = battleship
         Scanner input = new Scanner (System.in);        
 
@@ -173,20 +205,20 @@ public class BattleshipRemade
                             response = input.nextLine();
                             check2 = false;
                             if (response.equalsIgnoreCase("a")) {
-                                check2 = true;
+                                check2 = true;                                
                                 printBoard(board, playerNumber, boardType);
                                 System.out.print("\n\n");
                                 placeShips(board, playerNumber, boardType, shipType);
-                            } else if (response.equalsIgnoreCase("b")) {
+                            } else {
                                 check2 = false;       
                                 check3 = true;
-                            } 
+                            }
                         }
-
                     } else {
                         if (check3 == true){
                             System.out.print("\n\n\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " 
                                 + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
+                            check3 = false;
                         } else if (check3 == false) {
                             System.out.print("\n\nError - Invalid Direction\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " 
                                 + shipLength + "\nChoose a direction to move your ship from this point: Up, Right, Left, Down [U, R, L, D]");
@@ -198,7 +230,6 @@ public class BattleshipRemade
                 System.out.print("\n\nError - Invalid Coordinate\n\nPlayer " + playerNumber + " - \nShip Type: " + shipName + "\nShip Length: " + shipLength + "\nChoose a starting location for your ship [Ex. A1]");
                 response = input.nextLine();
             }
-
         }
     }
 
@@ -322,7 +353,6 @@ public class BattleshipRemade
                 return true;
             } 
         }
-
         return false;
     }
 
