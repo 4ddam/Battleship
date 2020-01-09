@@ -42,6 +42,8 @@ public class BattleshipRemade
 {
     public static int coordinateX;
     public static int coordinateY;
+    public static int coordinateXShot;
+    public static int coordinateYShot;
     public static String placementDirection;
 
     public static void main() {
@@ -51,25 +53,29 @@ public class BattleshipRemade
         System.out.print("Player 1 Is Placing Ships...");
         waitTime(1500);
 
-        printDuelBoard(masterBoard, 1);
+        //printBoard(masterBoard, 1, 1);
+        //System.out.print("\n\n");
+        //placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
+        //placeShips(masterBoard, 1, 1, "d");
+        //placeShips(masterBoard, 1, 1, "b");
+        //waitTime(500);
+        //System.out.print("\fPlayer 2 Is Placing Ships...");
+        //waitTime(1500);
 
-        waitTime(50000);
-        printBoard(masterBoard, 1, 1);
-        System.out.print("\n\n");
-        placeShips(masterBoard, 1, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
-        placeShips(masterBoard, 1, 1, "d");
-        placeShips(masterBoard, 1, 1, "b");
-        waitTime(500);
-        System.out.print("\fPlayer 2 Is Placing Ships...");
-        waitTime(1500);
+        //printBoard(masterBoard, 2, 1);
+        //System.out.print("\n\n");
+        //placeShips(masterBoard, 2, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
+        //placeShips(masterBoard, 2, 1, "d");
+        //placeShips(masterBoard, 2, 1, "b");
+        //waitTime(500);
 
-        printBoard(masterBoard, 2, 1);
-        System.out.print("\n\n");
-        placeShips(masterBoard, 2, 1, "c");                                   // c = cruiser, d = destroyer, b = battleship
-        placeShips(masterBoard, 2, 1, "d");
-        placeShips(masterBoard, 2, 1, "b");
+        System.out.print("\fStarting Game..."); 
+        waitTime(2000);
+        System.out.print("\fPlayer 1's Turn...");
+        waitTime(2500);                                                       // starting game
 
-        printDuelBoard(masterBoard, 1);                              // board, first board player, first board type, second board player, second board type
+        startGame(masterBoard);
+
     }
 
     private static void fillAllBoards(String[][][][] board, String fillCharacter) {             // Fills all 4 boards
@@ -135,31 +141,104 @@ public class BattleshipRemade
         }
     }
 
-    private static void printDuelBoard(String[][][][] board, int playerNumber) {
+    private static void printDuelBoard(String[][][][] board, int playerNumber) {            // Print side by side board
         if (playerNumber == 1) {
-            System.out.println("\f\n                           𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙎𝙝𝙞𝙥 𝘽𝙤𝙖𝙧𝙙\t\t\t\t\t\t\t\t   𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙏𝙤𝙧𝙥𝙚𝙙𝙤 𝘽𝙤𝙖𝙧𝙙\n"); 
+            System.out.println("\f\n                           𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙎𝙝𝙞𝙥 𝘽𝙤𝙖𝙧𝙙\t\t\t\t\t\t\t\t      𝙋𝙡𝙖𝙮𝙚𝙧 𝟏'𝙨 𝙏𝙤𝙧𝙥𝙚𝙙𝙤 𝘽𝙤𝙖𝙧𝙙\n"); 
             System.out.print("  ");
-            for (int r = 0; r < board[0][0].length; r++) {   
-                System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
-            }   
-            System.out.print("\t\t");
-            for (int r = 0; r < board[0][0].length; r++) {   
-                System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
-            } 
-            for (int r = 0; r < board[0][0].length; r++) {
-                System.out.print("\n\n"); 
-                for (int c = 0; c < board[0][0][0].length; c++) { 
-                    if (c%10 == 0) {
-                        if (r == 9) {
-                            System.out.print((r+1) + " ");
-                        } else {
-                            System.out.print((r+1) + "  ");
-                        }    
-                    }
-                    System.out.print("   " + board[playerNumber-1][0][r][c] + "   ");
-                }  
-            }   
         }
+        if (playerNumber == 2) {
+            System.out.println("\f\n                           𝙋𝙡𝙖𝙮𝙚𝙧 𝟐'𝙨 𝙎𝙝𝙞𝙥 𝘽𝙤𝙖𝙧𝙙\t\t\t\t\t\t\t\t      𝙋𝙡𝙖𝙮𝙚𝙧 𝟐'𝙨 𝙏𝙤𝙧𝙥𝙚𝙙𝙤 𝘽𝙤𝙖𝙧𝙙\n"); 
+            System.out.print("  ");
+        }
+
+        for (int r = 0; r < board[0][0].length; r++) {   
+            System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
+        }   
+        System.out.print("\t     ");
+        for (int r = 0; r < board[0][0].length; r++) {   
+            System.out.print("    " + (String.valueOf((char)(r+65))) + "  ");
+        } 
+        for (int r = 0; r < board[0][0].length; r++) {
+            System.out.print("\n\n"); 
+            for (int c = 0; c < board[0][0][0].length; c++) { 
+                if (c%10 == 0) {
+                    if (r == 9) {
+                        System.out.print((r+1) + " ");
+                    } else {
+                        System.out.print((r+1) + "  ");
+                    }                            
+                }
+                System.out.print("   " + board[playerNumber-1][0][r][c] + "   ");
+            }  
+            System.out.print("          ");
+            for (int i = 0; i < board[0][0][0].length; i++) {
+                if (i%10 == 0) {
+                    if (r == 9) {
+                        System.out.print((r+1) + " ");
+                    } else {
+                        System.out.print((r+1) + "  ");
+                    }                            
+                }
+                System.out.print("   " + board[playerNumber-1][1][r][i] + "   ");;
+            }
+            if (r == 1) {
+                System.out.print("       Symbol Key ");
+            }
+            if (r == 2) {
+                System.out.print("       X = Hit ");
+            }
+            if (r == 3) {
+                System.out.print("       O = Miss ");
+            }
+            if (r == 4) {
+                System.out.print("       C = Cruiser");
+            }
+            if (r == 5) {
+                System.out.print("       D = Cruiser");
+            }
+            if (r == 6) {
+                System.out.print("       B = Battleship");
+            }
+        }   
+    }
+
+    private static void startGame(String[][][][] board) {
+        Scanner input = new Scanner (System.in);
+        int currentPlayer = 1;
+        boolean check1 = false;
+
+        printDuelBoard(board, currentPlayer);
+
+        
+        System.out.print("\n\n\n\nPlayer " + currentPlayer + " - \nEnter a coordinate to shoot at [Ex A1] ");
+        String response = input.nextLine();
+        
+        while (check1 == false)
+        if (checkShotLocation(board, response, currentPlayer)) {
+            System.out.print("GOOD");
+        } else {
+            System.out.print("BAD");
+        }
+    }
+
+    private static boolean checkShotLocation(String[][][][] board, String response, int currentPlayer) {
+        Pattern pattern1 = Pattern.compile("^([A-Ja-j])([1-9]|10)$");
+        Matcher matcher = pattern1.matcher(response);
+        boolean goodResponse = false; 
+
+        if (matcher.matches()) {               
+            coordinateYShot = Integer.parseInt(matcher.group(2));
+            coordinateXShot = (((int)matcher.group(1).toUpperCase().charAt(0)) - 64);
+            if (!((board[currentPlayer-1][1][(coordinateYShot - 1)][(coordinateXShot - 1)].equalsIgnoreCase("X")) || 
+                !(board[currentPlayer-1][1][(coordinateYShot - 1)][(coordinateXShot - 1)].equalsIgnoreCase("O")))) {
+                    
+                goodResponse = false;
+            } else {
+                goodResponse = true;
+            }
+        }
+
+        return goodResponse;
     }
 
     private static void placeShips(String[][][][] board, int playerNumber, int boardType, String shipType) {       // 1 = cruiser, 2 = destroyer, 3 = battleship
@@ -197,7 +276,7 @@ public class BattleshipRemade
 
                 while (check2 == false) {
                     printBoard(board, playerNumber, boardType);
-                    if (checkDirection(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {
+                    if (checkDirection(board, playerNumber, boardType, shipType, shipName, response, shipLength)) {                        
                         if (placeShipOnBoard(board, playerNumber, boardType, shipLength, shipType, shipName)) {
                             check2 = true;
                         } else {
@@ -233,7 +312,7 @@ public class BattleshipRemade
         }
     }
 
-    private static boolean checkStartingLocation(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {    
+    private static boolean checkStartingLocation(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {        // Checks if starting location input and avalibility ok   
         Pattern pattern1 = Pattern.compile("^([A-Ja-j])([1-9]|10)$");
         Matcher matcher = pattern1.matcher(response);
         boolean goodResponse = false;       
@@ -254,10 +333,11 @@ public class BattleshipRemade
         return goodResponse;
     }
 
-    private static boolean checkDirection(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {
+    private static boolean checkDirection(String[][][][] board, int playerNumber, int boardType, String shipType, String shipName, String response, int shipLength) {           // Check if direction input is ok
         Pattern pattern1 = Pattern.compile("^([U|D|L|R|u|d|l|r]$)");
         Matcher matcher = pattern1.matcher(response);
         boolean goodResponse = false;     
+
         if (matcher.matches()) {               
             placementDirection = matcher.group(1).toUpperCase();
             goodResponse = true;           
@@ -268,7 +348,7 @@ public class BattleshipRemade
         return goodResponse;
     }
 
-    private static boolean placeShipOnBoard(String[][][][] board, int playerNumber, int boardType, int shipLength, String shipType, String shipName) {
+    private static boolean placeShipOnBoard(String[][][][] board, int playerNumber, int boardType, int shipLength, String shipType, String shipName) {              // check if ship fits at location
         int counter = 0;
         shipName = shipName.toLowerCase();
         String coordinateXLetter = Character.toString((char)(coordinateX + 64));
@@ -356,7 +436,7 @@ public class BattleshipRemade
         return false;
     }
 
-    private static void waitTime(int time) {
+    private static void waitTime(int time) {            // wait time for aesthetics
         try {
             Thread.sleep(time);
         } catch (InterruptedException ie) {
