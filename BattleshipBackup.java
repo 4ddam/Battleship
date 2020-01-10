@@ -37,7 +37,7 @@
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Scanner;
-public class BattleshipRemade
+public class BattleshipBackup
 {
     public static int coordinateX;
     public static int coordinateY;
