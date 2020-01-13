@@ -39,17 +39,17 @@ import java.util.regex.Matcher;
 import java.util.Scanner;
 public class BattleshipRemade
 {
-    public static int coordinateX;
-    public static int coordinateY;
-    public static int coordinateXShot;
-    public static int coordinateYShot;
-    public static String placementDirection;
-    public static int[][] hitCount = new int[2][3];
-    public static int[][] shipsSunk = new int[2][3];
-    public static String[][][][] board = new String[2][2][10][10];          // Player Number, Board Type, Rows, Columns
-    public static int currentPlayer = 1;
-    public static int counterP1 = 0;    
-    public static int counterP2 = 0;    
+    private static int coordinateX;
+    private static int coordinateY;
+    private static int coordinateXShot;
+    private static int coordinateYShot;
+    private static String placementDirection;
+    private static int[][] hitCount = new int[2][3];
+    private static int[][] shipsSunk = new int[2][3];
+    private static String[][][][] board = new String[2][2][10][10];          // Player Number, Board Type, Rows, Columns
+    private static int currentPlayer = 1;
+    private static int counterP1 = 0;    
+    private static int counterP2 = 0;    
 
     public static void main() {
         fillAllBoards("-");
@@ -214,7 +214,7 @@ public class BattleshipRemade
         } else if (currentPlayer == 2) {
             counterP2++;
         }
-
+        
         changeTurns();
         printDuelBoard(currentPlayer);
         System.out.print("\n\n\n\nPlayer " + currentPlayer + " - \nEnter a coordinate to shoot at [Ex A1] ");
@@ -241,48 +241,33 @@ public class BattleshipRemade
                     System.out.print("\n\nMiss!");    
                     waitTime(1000);  
                 }
+                
+                System.out.print("\n\nAre you done with your turn [Y] ");
+                String yes = input.nextLine();
 
                 if (currentPlayer == 1) {                           // changes players
                     currentPlayer = 2;
                 } else if (currentPlayer == 2) {
                     currentPlayer = 1;
                 }
-
-                System.out.print("\n\nAre you done with your turn [Y] ");
-                String yesOrNo = input.nextLine();
-
+                
                 while (check2 == false)
                 {
-                    if (checkYesOrNo(yesOrNo)) {
+                    if (BasicCheck(yes, "^([Y|y]$)")) {
                         check2 = true;
                         doTurns();
                     } else {
                         printDuelBoard(currentPlayer);     
                         System.out.print("\n\nError - The only option is 'Y'\n\nAre you done with your turn [Y] ");
-                        yesOrNo = input.nextLine();
+                        yes = input.nextLine();
                     }
-                }
-
-                doTurns();
+                }                                
+                                
             } else {
                 System.out.print("\n\nError - Invalid Coordinate\n\nPlayer " + currentPlayer + " - \nEnter a coordinate to shoot at [Ex A1] ");
                 response = input.nextLine();
             }
         }
-    }
-
-    private static boolean checkYesOrNo(String yesOrNo) {
-        Pattern pattern1 = Pattern.compile("^([Y|y]$)");
-        Matcher matcher = pattern1.matcher(yesOrNo);
-        boolean goodResponse = false;     
-
-        if (matcher.matches()) {               
-            goodResponse = true;           
-        } else {
-            goodResponse = false;
-        }
-
-        return goodResponse;
     }
 
     private static boolean checkForSink() {
@@ -409,6 +394,7 @@ public class BattleshipRemade
         boolean check1 = false;
         boolean check2 = false;
         boolean check3 = false;
+        boolean check4 = false;
 
         shipType = shipType.toUpperCase();
 
@@ -441,20 +427,27 @@ public class BattleshipRemade
                         } else {
                             System.out.print("\n\nError - Cannot Place Ship There\n\nPlayer " + playerNumber + " - \nWould you like to:\na) change the coordinates \nb) change the direction");
                             response = input.nextLine();
-                            check2 = false;
-                            if (checkAOrB(response)){
-                                if (response.equalsIgnoreCase("a")) {
-                                    check2 = true;                                
-                                    printBoard(playerNumber, boardType);
-                                    System.out.print("\n\n");
-                                    placeShips(playerNumber, boardType, shipType);
+
+                            while (check4 == false) {
+                                check4 = true;
+                                check2 = false;
+                                if (BasicCheck(response, "^([A|a|B|b]$)")){ 
+                                    if (response.equalsIgnoreCase("a")) {
+                                        check2 = true;                                
+                                        printBoard(playerNumber, boardType);
+                                        System.out.print("\n\n");
+                                        placeShips(playerNumber, boardType, shipType);
+                                    } else {
+                                        check2 = false;       
+                                        check3 = true;
+                                    }
                                 } else {
-                                    check2 = false;       
-                                    check3 = true;
-                                }
-                            } else {
-                                check
-                            }   
+                                    printBoard(playerNumber, boardType);
+                                    check4 = false;
+                                    System.out.print("\n\nError - Not a valid letter\n\nPlayer " + playerNumber + " - \nWould you like to:\na) change the coordinates \nb) change the direction");
+                                    response = input.nextLine();
+                                }   
+                            }
                         }
                     } else {
                         if (check3 == true){
@@ -475,8 +468,8 @@ public class BattleshipRemade
         }
     }   
 
-    private static boolean checkAOrB (String response) {
-        Pattern pattern1 = Pattern.compile("^([A|a|B|b]$)");
+    private static boolean BasicCheck (String response, String regex) {
+        Pattern pattern1 = Pattern.compile(regex);
         Matcher matcher = pattern1.matcher(response);
         boolean goodResponse = false;     
 
