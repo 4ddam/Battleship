@@ -214,7 +214,7 @@ public class BattleshipRemade
         } else if (currentPlayer == 2) {
             counterP2++;
         }
-        
+
         changeTurns();
         printDuelBoard(currentPlayer);
         System.out.print("\n\n\n\nPlayer " + currentPlayer + " - \nEnter a coordinate to shoot at [Ex A1] ");
@@ -241,19 +241,18 @@ public class BattleshipRemade
                     System.out.print("\n\nMiss!");    
                     waitTime(1000);  
                 }
-                
+
                 System.out.print("\n\nAre you done with your turn [Y] ");
                 String yes = input.nextLine();
 
-                if (currentPlayer == 1) {                           // changes players
-                    currentPlayer = 2;
-                } else if (currentPlayer == 2) {
-                    currentPlayer = 1;
-                }
-                
                 while (check2 == false)
                 {
                     if (BasicCheck(yes, "^([Y|y]$)")) {
+                        if (currentPlayer == 1) {                           // changes players
+                            currentPlayer = 2;
+                        } else if (currentPlayer == 2) {
+                            currentPlayer = 1;
+                        }
                         check2 = true;
                         doTurns();
                     } else {
@@ -262,7 +261,7 @@ public class BattleshipRemade
                         yes = input.nextLine();
                     }
                 }                                
-                                
+
             } else {
                 System.out.print("\n\nError - Invalid Coordinate\n\nPlayer " + currentPlayer + " - \nEnter a coordinate to shoot at [Ex A1] ");
                 response = input.nextLine();
